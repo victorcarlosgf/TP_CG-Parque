@@ -118,4 +118,3 @@ void Sphere::draw()
 //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_vboIndex);
     glDrawElements(GL_QUAD_STRIP, numsToDraw, GL_UNSIGNED_INT, NULL);
 }
-

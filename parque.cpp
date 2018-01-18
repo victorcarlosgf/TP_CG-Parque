@@ -74,6 +74,56 @@ void cavalo(glm::mat4 M) {
    cubo.desenhar();
 }
 
+void skate(glm::mat4 posicao)
+{
+    // plataforma (placa de dimens�es 21x0.8x21, com face inferior em y=0.0)
+    float altPlat=0.8;
+    glm::mat4 matPlat(posicao);
+    matPlat = glm::translate(matPlat, glm::vec3(0.0, altPlat/2.0, 0.0));
+    matPlat = glm::scale(matPlat, glm::vec3(40.0, 0.8, 22.0));
+    glUniformMatrix4fv(Model,1,GL_FALSE, glm::value_ptr(matPlat));
+    cubo.desenhar();
+
+    // mastros sustentacao skate
+    float altMastro = 15.0;
+    float diamMastro = 0.3;  //di�metro do mastro
+    glm::mat4 matMastro(posicao);
+    matMastro = glm::translate(matMastro, glm::vec3(-20.0, altPlat/2.0, -4.0));
+    matMastro = glm::rotate(matMastro, glm::radians(-90.0f), glm::vec3(1.0f,0.0f,0.0f));
+    matMastro = glm::scale(matMastro, glm::vec3(diamMastro, diamMastro, altMastro));
+    glUniformMatrix4fv(Model,1,GL_FALSE, glm::value_ptr(matMastro));
+    cilindro.desenhar();
+
+    glm::mat4 matMastro2(posicao);
+    matMastro2 = glm::translate(matMastro2, glm::vec3(-20.0, altPlat/2.0, 4.0));
+    matMastro2 = glm::rotate(matMastro2, glm::radians(-90.0f), glm::vec3(1.0f,0.0f,0.0f));
+    matMastro2 = glm::scale(matMastro2, glm::vec3(diamMastro, diamMastro, altMastro));
+    glUniformMatrix4fv(Model,1,GL_FALSE, glm::value_ptr(matMastro2));
+    cilindro.desenhar();
+
+    glm::mat4 matMastro3(posicao);
+    matMastro3 = glm::translate(matMastro3, glm::vec3(20.0, altPlat/2.0, -4.0));
+    matMastro3 = glm::rotate(matMastro3, glm::radians(-90.0f), glm::vec3(1.0f,0.0f,0.0f));
+    matMastro3 = glm::scale(matMastro3, glm::vec3(diamMastro, diamMastro, altMastro));
+    glUniformMatrix4fv(Model,1,GL_FALSE, glm::value_ptr(matMastro3));
+    cilindro.desenhar();
+
+    glm::mat4 matMastro4(posicao);
+    matMastro4 = glm::translate(matMastro4, glm::vec3(20.0, altPlat/2.0, 4.0));
+    matMastro4 = glm::rotate(matMastro4, glm::radians(-90.0f), glm::vec3(1.0f,0.0f,0.0f));
+    matMastro4 = glm::scale(matMastro4, glm::vec3(diamMastro, diamMastro, altMastro));
+    glUniformMatrix4fv(Model,1,GL_FALSE, glm::value_ptr(matMastro4));
+    cilindro.desenhar();
+
+    // cobertura
+    glm::mat4 matCob(posicao);
+    matCob = glm::translate(matCob, glm::vec3(0.0, 10.0, 0.0));
+    matCob = glm::rotate(matCob, glm::radians(-90.0f), glm::vec3(1.0f,0.0f,0.0f));
+    matCob = glm::scale(matCob, glm::vec3(10.0, 10.0, 2.0));
+    glUniformMatrix4fv(Model,1,GL_FALSE, glm::value_ptr(matCob));
+    esfera.draw();
+}
+
 void carrossel(glm::mat4 posicao)
 {
     static float angCar=0.0; // rotacao do carrossel
@@ -144,9 +194,13 @@ void exibe( void )
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     chao();
-    glm::mat4 posicao;
-    posicao = glm::translate(posicao, glm::vec3(0.0,0.0,-30.0));
-    carrossel(posicao);
+    glm::mat4 posicaoCarrosel;
+    posicaoCarrosel = glm::translate(posicaoCarrosel, glm::vec3(0.0,0.0,-30.0));
+    carrossel(posicaoCarrosel);
+
+    glm::mat4 posicaoSkate;
+    posicaoSkate = glm::translate(posicaoSkate, glm::vec3(0.0,0.0,10.0));
+    skate(posicaoSkate);
 
     desenhaFonteDeLuz(light_position1, 0.5);
     desenhaFonteDeLuz(light_position2, 0.5);
