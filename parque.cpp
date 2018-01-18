@@ -210,10 +210,22 @@ void exibe( void )
 
 //----------------------------------------------------------------------------
 
+bool troca_camera;
+static glm::vec3 eye;
+
+void camera(bool troca)
+{
+    if(troca)
+        eye = glm::vec3(0.0,50.0,50.0);
+    else
+        eye = glm::vec3(0.0,10.0,50.0);
+}
+
 void posicionaCamera(unsigned char tecla) {
    static float angCam = 0.0;  // giro da c�mera em torno da origem
    float raioCam = 50.0; // raio da circunfer�ncia do movimento da c�mera
-   static glm::vec3 eye;
+   static float transCam = 40.0;
+   
    glm::vec3 center(0.0,0.0,0.0);
    glm::vec3 up(0.0,1.0,0.0);
    switch( tecla ) {
@@ -221,26 +233,42 @@ void posicionaCamera(unsigned char tecla) {
         eye = glm::vec3(0.0,10.0,raioCam);
 	    break;
      case 'j': // camera gira para a esquerda
-        angCam -= 0.5;
+        angCam -= 1.0;
 	    break;
      case 'l':  // camera gira para a direita
-        angCam += 0.5;
+        angCam += 1.0;
 	    break;
      case 'i': // camera sobe
-        eye.y += 0.2;
+        eye.y += 0.5;
 	    break;
      case 'k':  // camera desce
-        eye.y -= 0.2;
+        eye.y -= 0.5;
 	    break;
+    case 'p': // troca posicao da camera
+        troca_camera = !troca_camera;
+        camera(troca_camera);
+        break;
+    case 'w': // camera anda para frente
+        transCam -= 1.0;
+        break;
+    case 's': // camera anda para tras
+        transCam += 1.0;
+        break;
    }
    // calcular posicao da camera no plano XZ
    float angCamRad = glm::radians(angCam);
    eye.x = sin(angCamRad)*raioCam;
    eye.z = cos(angCamRad)*raioCam;
+
+   // calcular translacao da camera para frente e para tras
+   //eye.x = transCam;
+   //eye.z = transCam;
+
    glm::mat4 matVis = glm::lookAt(eye, center, up);
    glUniformMatrix4fv(View,1,GL_FALSE, glm::value_ptr(matVis));
    glutPostRedisplay();
 }
+
 
 void teclado( unsigned char tecla, int x, int y )
 {
